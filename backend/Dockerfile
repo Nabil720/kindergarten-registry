@@ -1,11 +1,11 @@
-FROM ghcr.io/golang/go:1.22
+# Use alpine variant to reduce pull size
+FROM golang:1.22-alpine
 
 WORKDIR /app
 
 COPY . .
 
 RUN go mod tidy
-
 RUN go build -o main .
 
 CMD ["./main"]
