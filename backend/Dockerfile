@@ -1,4 +1,4 @@
-FROM golang:1.22
+FROM ghcr.io/golang/go:1.22
 
 WORKDIR /app
 
