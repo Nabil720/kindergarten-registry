@@ -5,7 +5,7 @@ import StudentList from "./components/StudentList";
 function App() {
   const [students, setStudents] = useState([]);
 
-  const API_BASE = "/api"; // Adjust based on my backend setup
+  const API_BASE = ""; // Adjust based on my backend setup
 
   const fetchStudents = () => {
     fetch(`${API_BASE}/students`)
