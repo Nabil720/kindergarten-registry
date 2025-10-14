@@ -45,8 +45,8 @@ jobs:
         cd kindergarten-registry_k8s/k8s
 
         # Update image tags
-        sed -i "s|image: .*kindergarten-backend:.*|image: ${{ secrets.DOCKER_USERNAME }}/kindergarten-backend:${COMMIT_SHA}|" ./backend/deployment.yaml
-        sed -i "s|image: .*kindergarten-frontend:.*|image: ${{ secrets.DOCKER_USERNAME }}/kindergarten-frontend:${COMMIT_SHA}|" ./frontend/deployment.yaml
+        sed -i "s|image: .*kindergarten-backend:.*|image: ${{ secrets.DOCKER_USERNAME }}/kindergarten-backend:${COMMIT_SHA}|" ./backend-deployment.yaml
+        sed -i "s|image: .*kindergarten-frontend:.*|image: ${{ secrets.DOCKER_USERNAME }}/kindergarten-frontend:${COMMIT_SHA}|" ./frontend-deployment.yaml
 
         git add .
         if git diff --cached --quiet; then
