@@ -5,10 +5,12 @@ import StudentList from "./components/StudentList";
 function App() {
   const [students, setStudents] = useState([]);
 
+  const API_BASE = "/api"; // Adjust based on my backend setup
+
   const fetchStudents = () => {
-    fetch("http://localhost:5000/students")
+    fetch(`${API_BASE}/students`)
       .then((res) => res.json())
-      .then((data) => setStudents(data || [])) 
+      .then((data) => setStudents(data || []))
       .catch((err) => console.error("Fetch error:", err));
   };
 
@@ -17,7 +19,7 @@ function App() {
   }, []);
 
   const addStudent = async (student) => {
-    await fetch("http://localhost:5000/add-student", {
+    await fetch(`${API_BASE}/add-student`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(student),
@@ -27,7 +29,7 @@ function App() {
 
   const handleDelete = async (roll) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
-      await fetch(`http://localhost:5000/delete-student?roll=${roll}`, {
+      await fetch(`${API_BASE}/delete-student?roll=${roll}`, {
         method: "DELETE",
       });
       fetchStudents();
@@ -35,7 +37,7 @@ function App() {
   };
 
   const handleEdit = async (student) => {
-    await fetch("http://localhost:5000/update-student", {
+    await fetch(`${API_BASE}/update-student`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(student),
@@ -47,7 +49,11 @@ function App() {
     <div style={{ padding: 20 }}>
       <h1>Kindergarten School Registry</h1>
       <StudentForm onAddStudent={addStudent} />
-      <StudentList students={students} onDelete={handleDelete} onEdit={handleEdit} />
+      <StudentList
+        students={students}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+      />
     </div>
   );
 }
