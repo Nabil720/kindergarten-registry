@@ -8,7 +8,7 @@ function App() {
   const API_BASE = ""; // Adjust based on my backend setup
 
   const fetchStudents = () => {
-    fetch(`${API_BASE}/students`)
+    fetch(`/students`)
       .then((res) => res.json())
       .then((data) => setStudents(data || []))
       .catch((err) => console.error("Fetch error:", err));
@@ -19,7 +19,7 @@ function App() {
   }, []);
 
   const addStudent = async (student) => {
-    await fetch(`${API_BASE}/add-student`, {
+    await fetch(`/add-student`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(student),
@@ -29,7 +29,7 @@ function App() {
 
   const handleDelete = async (roll) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
-      await fetch(`${API_BASE}/delete-student?roll=${roll}`, {
+      await fetch(`/delete-student?roll=${roll}`, {
         method: "DELETE",
       });
       fetchStudents();
@@ -37,7 +37,7 @@ function App() {
   };
 
   const handleEdit = async (student) => {
-    await fetch(`${API_BASE}/update-student`, {
+    await fetch(`/update-student`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(student),
