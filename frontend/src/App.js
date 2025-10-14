@@ -24,7 +24,7 @@ function App() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(student),
     });
-    fetchStudents();
+    await fetchStudents();
   };
 
   const handleDelete = async (roll) => {
