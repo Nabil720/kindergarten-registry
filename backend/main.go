@@ -12,6 +12,17 @@ func enableCors(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
 
+func healthz(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
+}
+
+func readiness(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Ready"))
+}
+
+
 func main() {
 	http.HandleFunc("/api/add-student", func(w http.ResponseWriter, r *http.Request) {
 		enableCors(w)
@@ -52,6 +63,9 @@ func main() {
 		}
 		handlers.UpdateStudent(w, r)
 	})
+
+	http.HandleFunc("/healthz", healthz)
+	http.HandleFunc("/readiness", readiness)
 
 	log.Println("Server running on port 5000")
 	log.Fatal(http.ListenAndServe(":5000", nil))
