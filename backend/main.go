@@ -6,14 +6,13 @@ import (
 	"net/http"
 )
 
-// CORS middleware function
+// CORS middleware function - FIXED VERSION
 func enableCors(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Set CORS headers
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		// Simple solution - allow all origins in development
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		// Handle preflight OPTIONS request
 		if r.Method == "OPTIONS" {
@@ -43,8 +42,6 @@ func main() {
 	http.HandleFunc("/add-student", enableCors(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			handlers.AddStudent(w, r)
-		} else if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
@@ -53,8 +50,6 @@ func main() {
 	http.HandleFunc("/students", enableCors(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handlers.GetStudents(w, r)
-		} else if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
@@ -63,8 +58,6 @@ func main() {
 	http.HandleFunc("/delete-student", enableCors(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodDelete {
 			handlers.DeleteStudent(w, r)
-		} else if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
@@ -73,8 +66,6 @@ func main() {
 	http.HandleFunc("/update-student", enableCors(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPut {
 			handlers.UpdateStudent(w, r)
-		} else if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
