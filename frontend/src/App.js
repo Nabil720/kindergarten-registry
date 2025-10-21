@@ -5,11 +5,14 @@ import StudentList from "./components/StudentList";
 function App() {
   const [students, setStudents] = useState([]);
 
-  const API_BASE = "/api"; // Adjust based on my backend setup
-
   const fetchStudents = () => {
-    fetch(`${API_BASE}/students`)
-      .then((res) => res.json())
+    fetch("http://localhost:5000/students")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => setStudents(data || []))
       .catch((err) => console.error("Fetch error:", err));
   };
@@ -19,30 +22,42 @@ function App() {
   }, []);
 
   const addStudent = async (student) => {
-    await fetch(`${API_BASE}/add-student`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(student),
-    });
-    await fetchStudents();
+    try {
+      await fetch("http://localhost:5000/add-student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(student),
+      });
+      fetchStudents(); // Refresh student list after adding
+    } catch (err) {
+      console.error("Error adding student:", err);
+    }
   };
 
   const handleDelete = async (roll) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
-      await fetch(`${API_BASE}/delete-student?roll=${roll}`, {
-        method: "DELETE",
-      });
-      fetchStudents();
+      try {
+        await fetch(`http://localhost:5000/delete-student?roll=${roll}`, {
+          method: "DELETE",
+        });
+        fetchStudents(); // Refresh list after deletion
+      } catch (err) {
+        console.error("Error deleting student:", err);
+      }
     }
   };
 
   const handleEdit = async (student) => {
-    await fetch(`${API_BASE}/update-student`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(student),
-    });
-    fetchStudents();
+    try {
+      await fetch(`http://localhost:5000/update-student`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(student),
+      });
+      fetchStudents(); // Refresh list after update
+    } catch (err) {
+      console.error("Error updating student:", err);
+    }
   };
 
   return (

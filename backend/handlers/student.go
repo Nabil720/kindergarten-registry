@@ -6,27 +6,31 @@ import (
 	"sync"
 )
 
+// Define the structure for Student
 type Student struct {
 	Name    string `json:"name"`
 	Roll    string `json:"roll"`
 	Address string `json:"address"`
 }
 
+// Define the student list and mutex for concurrency control
 var (
 	students []Student
 	mu       sync.Mutex
 )
 
+// Get all students (GET /students)
 func GetStudents(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	mu.Lock()
 	defer mu.Unlock()
-	 if students == nil {
-        students = make([]Student, 0) // Initialize if nil
-    }
+	if students == nil {
+		students = make([]Student, 0) // Initialize if nil
+	}
 	json.NewEncoder(w).Encode(students)
 }
 
+// Add a new student (POST /add-student)
 func AddStudent(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var student Student
@@ -41,6 +45,7 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(student)
 }
 
+// Delete a student (DELETE /delete-student?roll=123)
 func DeleteStudent(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	roll := r.URL.Query().Get("roll")
@@ -62,6 +67,7 @@ func DeleteStudent(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Student not found", http.StatusNotFound)
 }
 
+// Update a student (PUT /update-student)
 func UpdateStudent(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var updated Student
